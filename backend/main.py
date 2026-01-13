@@ -23,14 +23,14 @@ doc_embeddings = np.array(doc_embeddings).astype("float32")
 # -----------------------------
 dimension = doc_embeddings.shape[1]
 index = faiss.IndexFlatL2(dimension)
-index.add(doc_embeddings)
+index.add(doc_embeddings) # type: ignore
 
 # -----------------------------
 # Step 5: Retrieval function
 # -----------------------------
 def retrieve(query: str, k: int = 2):
     query_embedding = model.encode([query]).astype("float32")
-    distances, indices = index.search(query_embedding, k)
+    distances, indices = index.search(query_embedding, k) # type: ignore
 
     return [docs[i] for i in indices[0]]
 

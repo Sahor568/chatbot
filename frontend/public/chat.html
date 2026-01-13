@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot Search</title>
+    <link rel="stylesheet" href="/chat.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="branding">
+          <img src="/vite.svg" class="logo" alt="Logo" />
+          <h1>Chatbot Search</h1>
+        </div>
+        <div class="api-config">
+          <label for="apiBase">API</label>
+          <input id="apiBase" type="url" placeholder="http://localhost:8000" />
+          <button id="saveApi" aria-label="Save API base">Save</button>
+        </div>
+      </header>
+
+      <main class="main">
+        <form id="queryForm" class="query-box" autocomplete="off">
+          <input id="queryInput" type="text" placeholder="Ask something..." required />
+          <button id="sendBtn" type="submit">Search</button>
+        </form>
+
+        <section class="status" id="status" aria-live="polite"></section>
+
+        <section class="results" id="results"></section>
+      </main>
+
+      <footer class="footer">
+        <span>Powered by FastAPI + FAISS</span>
+      </footer>
+    </div>
+
+    <script src="/chat.js" type="module"></script>
+  </body>
+  </html>

@@ -1,0 +1,66 @@
+:root {
+  --bg: #0b1020;
+  --panel: #111831;
+  --card: #151d3a;
+  --accent: #6aa7ff;
+  --text: #e8eefc;
+  --muted: #9fb2d3;
+  --danger: #ff6b6b;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background: radial-gradient(1200px 800px at 20% -10%, #1a2458 0%, transparent 60%),
+             radial-gradient(800px 600px at 100% 0%, #133b6f 0%, transparent 40%),
+             var(--bg);
+}
+
+.app { min-height: 100%; display: grid; grid-template-rows: auto 1fr auto; }
+
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: 0.8rem 1rem; background: var(--panel); border-bottom: 1px solid #1e2b56;
+}
+.branding { display: flex; align-items: center; gap: 0.6rem; }
+.logo { width: 28px; height: 28px; filter: drop-shadow(0 0 10px rgba(106,167,255,0.4)); }
+.branding h1 { font-size: 1.05rem; margin: 0; font-weight: 600; }
+
+.api-config { display: flex; align-items: center; gap: 0.5rem; }
+.api-config label { font-size: 0.85rem; color: var(--muted); }
+.api-config input {
+  width: 240px; padding: 0.5rem 0.6rem; border-radius: 8px; border: 1px solid #27335f;
+  background: #0d1430; color: var(--text); outline: none;
+}
+.api-config button {
+  background: var(--accent); border: none; color: #081229; font-weight: 700; padding: 0.55rem 0.8rem; border-radius: 8px; cursor: pointer;
+}
+
+.main { max-width: 920px; margin: 1rem auto; padding: 0 1rem; }
+.query-box { display: grid; grid-template-columns: 1fr auto; gap: 0.6rem; }
+.query-box input {
+  padding: 0.9rem 1rem; border-radius: 12px; border: 1px solid #27335f; background: var(--card); color: var(--text);
+}
+.query-box button { background: var(--accent); border: none; color: #081229; font-weight: 700; padding: 0 1.2rem; border-radius: 12px; cursor: pointer; }
+.query-box button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.status { margin: 0.8rem 0; color: var(--muted); min-height: 1.2rem; }
+
+.results { display: grid; gap: 0.8rem; margin-top: 0.6rem; }
+.card {
+  background: var(--card); border: 1px solid #23315f; border-radius: 14px; padding: 0.9rem 1rem; line-height: 1.5;
+  box-shadow: 0 6px 20px rgba(8, 18, 41, 0.45), inset 0 1px 0 rgba(106,167,255,0.06);
+}
+.card .idx { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.25rem; }
+.card .text { white-space: pre-wrap; }
+
+.error { color: var(--danger); }
+
+.footer { text-align: center; padding: 0.8rem; color: var(--muted); border-top: 1px solid #1e2b56; background: var(--panel); }
+
+@media (max-width: 520px) {
+  .api-config input { width: 170px; }
+}
