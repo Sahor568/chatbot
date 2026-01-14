@@ -3,10 +3,11 @@ import './App.css'
 
 function App() {
   const [messages, setMessages] = useState([
-    { id: 1, text: 'Hello! 👋 How can I help you today?', sender: 'bot', timestamp: new Date() }
+    { id: 1, text: 'Hello! 👋 I\'m powered by Grok AI. How can I help you today?', sender: 'bot', timestamp: new Date() }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [useGrok, setUseGrok] = useState(true) // Toggle between Grok and semantic search
   const messagesEndRef = useRef(null)
 
   const scrollToBottom = () => {
@@ -35,28 +36,71 @@ function App() {
     setLoading(true)
 
     try {
-      // Call backend API
-      const response = await fetch(`http://localhost:8000/search?query=${encodeURIComponent(input)}&k=2`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+      let botResponse = ''
+      let endpoint = ''
+
+      if (useGrok) {
+        // Use Grok AI with RAG context
+        endpoint = 'http://localhost:8000/chat-with-context'
+        
+        // Format conversation history for Grok
+        const conversationMessages = messages
+          .filter(msg => msg.id > 1) // Skip initial greeting
+          .map(msg => ({
+            role: msg.sender === 'user' ? 'user' : 'assistant',
+            content: msg.text
+          }))
+        
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: input,
+            messages: conversationMessages
+          })
+        })
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
-      })
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        const data = await response.json()
+        
+        if (data.error) {
+          botResponse = `⚠️ ${data.error}`
+        } else {
+          botResponse = data.content || 'No response received'
+          // Optionally show the context used
+          if (data.context && data.context.length > 0) {
+            botResponse += `\n\n📚 Context: ${data.context.join(', ')}`
+          }
+        }
+      } else {
+        // Use semantic search (original behavior)
+        endpoint = `http://localhost:8000/search?query=${encodeURIComponent(input)}&k=2`
+        
+        const response = await fetch(endpoint, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+
+        const data = await response.json()
+        botResponse = data.results && data.results.length > 0
+          ? data.results.join('\n\n')
+          : 'No relevant information found for your query.'
       }
-
-      const data = await response.json()
-      
-      // Format results as bot message
-      const resultText = data.results && data.results.length > 0
-        ? data.results.join('\n\n')
-        : 'No relevant information found for your query.'
       
       const botMessage = {
         id: messages.length + 2,
-        text: resultText,
+        text: botResponse,
         sender: 'bot',
         timestamp: new Date()
       }
@@ -79,8 +123,22 @@ function App() {
   return (
     <div className="chatbot-container">
       <div className="chatbot-header">
-        <h1>💬 AI Chatbot</h1>
-        <p>Ask me anything!</p>
+        <h1>💬 Grok-Powered Chatbot</h1>
+        <p>AI Chat with Semantic Search Context</p>
+        <div className="mode-toggle">
+          <button 
+            className={`mode-btn ${useGrok ? 'active' : ''}`}
+            onClick={() => setUseGrok(true)}
+          >
+            🤖 Grok AI
+          </button>
+          <button 
+            className={`mode-btn ${!useGrok ? 'active' : ''}`}
+            onClick={() => setUseGrok(false)}
+          >
+            🔍 Search
+          </button>
+        </div>
       </div>
 
       <div className="chatbot-messages">

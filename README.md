@@ -206,7 +206,7 @@ curl http://localhost:8000/
 Response:
 ```json
 {
-  "message": "Hare Krishna"
+  "message": "jai mahakaal"
 }
 ```
 

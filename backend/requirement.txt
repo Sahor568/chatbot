@@ -5,4 +5,5 @@ pydantic
 pandas
 numpy
 sentence-transformers
-faiss-cpu
+faiss-cpupython-dotenv
+requests

@@ -89,7 +89,7 @@ The backend will start on `http://localhost:8000`
 - **Response**:
 ```json
 {
-  "message": "Hare Krishna"
+  "message": "jai mahakaal"
 }
 ```
 
